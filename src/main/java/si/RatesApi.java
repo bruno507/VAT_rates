@@ -6,6 +6,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -19,12 +21,15 @@ import java.util.stream.Collectors;
 public class RatesApi {
 
     private List<Country> vatRates = new ArrayList<>();
+    @ConfigProperty(name = "rates.url")
+    String dataUrl;
+
 
     @PostConstruct
     void init() {
         HttpResponse<String> response;
             try (HttpClient client = HttpClient.newHttpClient()) {
-                HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://euvatrates.com/rates.json")).GET().build();
+                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(dataUrl)).GET().build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
