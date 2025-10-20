@@ -4,7 +4,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 class ExampleResourceTest {
@@ -15,17 +14,18 @@ class ExampleResourceTest {
                 .then()
                 .statusCode(404);
     }
+    @Test
     void testHighestStandardVatRate() {
         given()
                 .when().get("/highest-standard-vat")
                 .then()
                 .statusCode(200);
     }
+    @Test
     void testLowestReducedVatRate() {
         given()
                 .when().get("/lowest-reduced-vat")
                 .then()
                 .statusCode(200);
     }
-
 }
